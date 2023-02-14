@@ -1,0 +1,19 @@
+{
+  "name": "aiselfdrivingcar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "git": "git add . && git commit -m 'AutoCommit' && git push origin"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pufikas/aiSelfDrivingCar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pufikas/aiSelfDrivingCar/issues"
+  },
+  "homepage": "https://github.com/Pufikas/aiSelfDrivingCar#readme"
+}
