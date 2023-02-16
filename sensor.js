@@ -21,6 +21,30 @@ class Sensor {
     }
   }
 
+  #getReadings(ray,roadBorders){
+    let touches = []
+
+    for(let i=0; i < roadBorders.length; i++){
+      const touch = getIntersection(
+        ray[0],
+        ray[1],
+        roadBorders[i][0],
+        roadBorders[i][1]
+      )
+      if(touch){
+        touches.push(touch)
+        console.log(this)
+      }
+    }
+    if(touches.length == 0){
+      return null
+    } else {
+      const offsets = touches.map(e => e.offset)
+      const minOffset = Math.min(...offsets) // the ... spreads the values
+      return touches.find(e => e.offset == minOffset)
+    }
+  }
+
   #castRays(){
     this.rays = []
     for(let i=0; i < this.rayCount; i++) {
@@ -44,6 +68,10 @@ class Sensor {
 
   draw(ctx){
     for(let i=0; i < this.rayCount; i++){
+      let end = this.rays[i][1]
+      if(this.readings[i]){
+        end = this.readings[i]
+      }
       ctx.beginPath()
       ctx.lineWidth = 2
       ctx.strokeStyle = "yellow"
@@ -52,8 +80,25 @@ class Sensor {
         this.rays[i][0].y
       )
       ctx.lineTo(
+        //this.rays[i][1].x,
+        //this.rays[i][1].y
+        end.x,
+        end.y
+      )
+      ctx.stroke()
+
+      ctx.beginPath()
+      ctx.lineWidth = 2
+      ctx.strokeStyle = "black"
+      ctx.moveTo(
         this.rays[i][1].x,
         this.rays[i][1].y
+      )
+      ctx.lineTo(
+        //this.rays[i][1].x,
+        //this.rays[i][1].y
+        end.x,
+        end.y
       )
       ctx.stroke()
     }
