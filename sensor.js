@@ -21,13 +21,13 @@ class Sensor {
     }
   }
 
-  #getReadings(ray,roadBorders){
+  #getReadings(rays,roadBorders){
     let touches = []
 
     for(let i=0; i < roadBorders.length; i++){
       const touch = getIntersection(
-        ray[0],
-        ray[1],
+        rays[0],
+        rays[1],
         roadBorders[i][0],
         roadBorders[i][1]
       )
@@ -100,7 +100,7 @@ class Sensor {
         end.x,
         end.y
       )
-      ctx.stroke()
+      ctx.restore()
     }
   }
 }
