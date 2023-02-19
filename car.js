@@ -1,5 +1,5 @@
 class Car {
-  constructor(x,y,width,height) {
+  constructor(x,y,width,height,controlType,maxSpeed=3) {
     this.x = x
     this.y = y
     this.width = width
@@ -7,25 +7,36 @@ class Car {
 
     this.speed = 0
     this.acceleration = 0.2
-    this.maxSpeed = 3
+    this.maxSpeed = maxSpeed
     this.friction = 0.05
     this.angle = 0
     this.damaged = false
 
-    this.sensor = new Sensor(this)
-    this.controls = new Controls()
+    if(controlType != "DUMMY"){
+      this.sensor = new Sensor(this)
+    }
+    this.controls = new Controls(controlType)
   }
   
-  update(roadBorders){
+  update(roadBorders,traffic){
+    if(!this.damaged){
     this.#move()
     this.polygon = this.#createPolygon()
-    this.damaged = this.#assessDamage(roadBorders)
-    this.sensor.update(roadBorders)
+    this.damaged = this.#assessDamage(roadBorders,traffic)
+    }
+    if(this.sensor){
+      this.sensor.update(roadBorders,traffic)
+    }
   }
 
-  #assessDamage(roadBorders){
-    for(let i=0;i<roadBorders.length;i++){
+  #assessDamage(roadBorders,traffic){
+    for(let i = 0; i < roadBorders.length; i++){
       if(polysIntersect(this.polygon, roadBorders[i])){
+        return true
+      }
+    }
+    for(let i = 0; i < traffic.length; i++){
+      if(polysIntersect(this.polygon, traffic[i].polygon)){
         return true
       }
     }
@@ -37,7 +48,7 @@ class Car {
     const rad = Math.hypot(this.width, this.height)/2
     const alpha = Math.atan2(this.width, this.height)
     points.push({
-      x:this.x - Math.sin(this.angle - alpha)*rad*4, // remove 4
+      x:this.x - Math.sin(this.angle - alpha)*rad, // remove 4
       y:this.y - Math.cos(this.angle - alpha)*rad
     })
     points.push({
@@ -99,11 +110,11 @@ class Car {
     this.y -= Math.cos(this.angle)*this.speed
   }
   
-  draw(ctx){
-    if(this.damages){
-      ctx.fillStyle = "red"
+  draw(ctx,color){
+    if(this.damaged){
+      ctx.fillStyle = "green"
     } else {
-      ctx.fillStyle = "black"
+      ctx.fillStyle = color
     }
     // ctx.save()
     // ctx.translate(this.x,this.y)
@@ -125,6 +136,10 @@ class Car {
       ctx.lineTo(this.polygon[i].x, this.polygon[i].y)
     }
     ctx.fill()
-    this.sensor.draw(ctx)
+
+    if(this.sensor){
+      this.sensor.draw(ctx)
+    }
+
   }
 }
