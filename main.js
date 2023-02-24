@@ -16,7 +16,15 @@ const traffic = [
 
 animate()
 
-function animate() {
+function generateCars(N) {
+    const cars = []
+    for (let i = 1; i < N; i++) {
+        cars.push(new Car(road.getLaneCenter(1),100,30,50,"AI"))
+    }
+    return cars
+}
+
+function animate(time) {
     for(let i = 0; i < traffic.length; i++) {
         traffic[i].update(road.borders,[])
     }
@@ -35,5 +43,8 @@ function animate() {
     car.draw(carCtx, "blue")
 
     carCtx.restore()
+
+    networkCtx.lineDashOffset = -time/50
+    Visualizer.drawNetwork(networkCtx,car.brain)
     requestAnimationFrame(animate)
 }
