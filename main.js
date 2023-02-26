@@ -18,16 +18,22 @@ if(localStorage.getItem("bestBrain")){
         cars[i].brain = JSON.parse(localStorage.getItem("bestBrain"))
 
         if(i != 0){
-            NeuralNetwork.mutate(cars[i].brain, 0.1)
+            NeuralNetwork.mutate(cars[i].brain, 0.2) // the higher the mutate the more diff the cars will be
         }
     }
 }
 
+// make traffic auto generated so cars will be never ending
+// add auto adding best car in save
 
 const traffic = [
     new Car(road.getLaneCenter(1), -100,30,50,"DUMMY",2),
     new Car(road.getLaneCenter(0), -300,30,50,"DUMMY",2),
-    new Car(road.getLaneCenter(2), -300,30,50,"DUMMY",2)
+    new Car(road.getLaneCenter(2), -300,30,50,"DUMMY",2),
+    new Car(road.getLaneCenter(1), -500,30,50,"DUMMY",2),
+    new Car(road.getLaneCenter(0), -700,30,50,"DUMMY",2),
+    new Car(road.getLaneCenter(0), -800,30,50,"DUMMY",2),
+    new Car(road.getLaneCenter(2), -860,30,50,"DUMMY",2)
 ]
 //car.draw(ctx)
 
